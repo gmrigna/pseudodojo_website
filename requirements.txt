@@ -4,3 +4,4 @@ abipy
 jinja2
 plotly
 markdown
+beautifulsoup4

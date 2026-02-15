@@ -101,6 +101,8 @@ All these figures can be automatically generated from the output file of oncvpsp
 pages when we prepare the deployment rather than storying a bunch of HTML files in the repo itself.
 In the original version of the pseudodojo website we were also showing the results of the different
 validation tests (delta-gauge, GBVR benchmark, phonons, ghost test).
+This part is not yet coded as one should define the format for the json files with the validation results
+and implement plotting tools.
 
 The results of these validation tests are stored in the djrepo file.
 It seemed like a good idea at the time but there are also several drawbacks that should be taken into account:

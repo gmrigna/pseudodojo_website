@@ -15,6 +15,7 @@ from pathlib import Path
 from collections import defaultdict
 from multiprocessing import Pool, cpu_count
 #from tqdm import tqdm
+from monty.termcolor import cprint
 from pymatgen.io.abinit.pseudos import Pseudo, PawXmlSetup
 from abipy.flowtk.psrepos import download_repo_from_url  # md5_for_filepath
 
@@ -149,6 +150,77 @@ def make_atompaw_html(dirpath, prefix, from_scratch):
     return write_html_from_jth_xml(xml_path)
 
 
+def get_select_option_values(html: str, select_id: str = None):
+    """
+    Extract all option values from a <select> element.
+
+    Parameters
+    ----------
+    html : str
+        HTML content as a string.
+    select_id : str, optional
+        If provided, selects the <select> by id.
+
+    Returns: List of option values.
+    """
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(html, "html.parser")
+
+    if select_id:
+        select = soup.find("select", id=select_id)
+    else:
+        # fallback: select inside the styled-longselect div
+        div = soup.find("div", class_="styled-longselect")
+        select = div.find("select") if div else None
+
+    if not select:
+        return []
+
+    return [option["value"] for option in select.find_all("option") if option.has_attr("value")]
+
+
+def get_directory_size(path: str) -> int:
+    """
+    Return total size (in Mb) of all files under `path`.
+    """
+    root = Path(path)
+    if not root.exists():
+        raise FileNotFoundError(f"{path} does not exist")
+
+    total_bytes = 0
+    for p in root.rglob("*"):
+        if p.is_file():
+            total_bytes += p.stat().st_size
+
+    return total_bytes / 1_000_000
+
+
+def validate_file(path: str | Path) -> Path:
+    """
+    Validate that a file exists, is a regular file, is not empty, and is readable.
+
+    Returns the resolved Path if valid. Raises informative exceptions otherwise.
+    """
+    p = Path(path)
+
+    if not p.exists():
+        raise FileNotFoundError(f"File does not exist: {p}")
+
+    if not p.is_file():
+        raise ValueError(f"Path is not a regular file: {p}")
+
+    if p.stat().st_size == 0:
+        raise ValueError(f"File is empty: {p}")
+
+    try:
+        with p.open("rb") as f:
+            f.read(1)
+    except Exception as e:
+        raise ValueError(f"File is not readable or corrupted: {p}") from e
+
+    return p.resolve()
+
+
 class PseudosRepo(abc.ABC):
     """
     Base abstract class for a github repository containing pseudopotentials generated
@@ -249,7 +321,7 @@ class PseudosRepo(abc.ABC):
         # Preparing args required to build HTML pages.
         unique_paths = sorted(set(p for l in relpaths_table.values() for p in l))
         nprocs = max(1, cpu_count() // 2)
-        nprocs = 1
+        #nprocs = 1
 
         if self.ps_generator == "ONCVPSP":
             function = make_oncv_html
@@ -482,8 +554,8 @@ class Website:
 
         self.repos = [
             # ONCVPSP repositories.
-            #_mk_onc(xc_name="PBEsol", relativity_type="SR", version="0.4"),
-            #_mk_onc(xc_name="PBEsol", relativity_type="FR", version="0.4"),
+            _mk_onc(xc_name="PBEsol", relativity_type="SR", version="0.4"),
+            #_mk_onc(xc_name="PBEsol", relativity_type="FR", version="0.4"),  # FIXME PLotting errors
             #_mk_onc(xc_name="PBE", relativity_type="SR", version="0.4"),
             #_mk_onc(xc_name="PBE", relativity_type="FR", version="0.4"),  FIXME: checksum fails
             #_mk_onc(xc_name="LDA", relativity_type="SR", version="0.4"),
@@ -494,7 +566,7 @@ class Website:
             # FIXME: These repos do no provide .txt files with pseudo list e.g. standard.txt, stringent
             # so we temporarily disable them.
             _mk_jth(xc_name="PBE", relativity_type="SR", version="2.0"),
-            #_mk_jth(xc_name="LDA", relativity_type="SR", version="2.0"),
+            _mk_jth(xc_name="LDA", relativity_type="SR", version="2.0"),
         ]
 
     def build(self, from_scratch: bool) -> None:
@@ -562,7 +634,7 @@ class Website:
 
                         files[repo.type][repo.xc_name][table_name][elm][fmt] = rpath
 
-        print("\nWriting files.json and targz.json")
+        print(f"\nWriting files.json and targz.json in {self.path}")
         workdir = os.path.join(self.path, "json")
         if not os.path.isdir(workdir):
             os.mkdir(workdir)
@@ -573,9 +645,76 @@ class Website:
         with open(os.path.join(workdir, "targz.json"), "w") as fh:
             json.dump(targz, fh, indent=2, sort_keys=True)
 
+        size_mb = get_directory_size(tables_dirpath)
+        print("Total size of {tables_dirpath}: {size_mb} Mb")
+
         print("Rember to execute `serve.sh` to test the web-server!")
 
-    #def check(self) -> None:
+    def check(self) -> int:
+        print("Validating json files with paths...")
+
+        errors = []
+
+        # Get the table type from index.html
+        # This set must be consistent with the one found in the json file else we have to update index.html
+        with open(os.path.join(self.path, "index.html"), "rt") as fh:
+            html = fh.read()
+            repo_types_in_index = set(get_select_option_values(html))
+            #print(f"{repo_types_in_index=}")
+
+        # Test targz files
+        with open(os.path.join(self.path, "json", "targz.json")) as fh:
+            targz = json.load(fh)
+
+        repo_types = set(targz.keys())
+        if repo_types != repo_types_in_index:
+            msg = f"In targz.json: {repo_types=} != {repo_types_in_index=}\nUpdate index.html"
+            errors.append(msg)
+
+        # targz[repo.type][repo.xc_name][table_name] = defaultdict(dict)
+        for repo_type, xc_dict in targz.items():
+            for xc_name, table_dict in xc_dict.items():
+                for table_name, fmt_to_path in table_dict.items():
+                    for fmt, rpath in fmt_to_path.items():
+                        targz_path = os.path.join(self.path, rpath)
+                        try:
+                            validate_file(targz_path)
+                        except Exception as exc:
+                            errors.append(str(exc))
+
+        # Test pseudopotential files
+        with open(os.path.join(self.path, "json", "files.json")) as fh:
+            files = json.load(fh)
+
+        repo_types = set(files.keys())
+        if repo_types != repo_types_in_index:
+            msg = f"In files.json: {repo_types=} != {repo_types_in_index=}\nUpdate index.html"
+            errors.append(msg)
+
+        for repo_type, xc_dict in files.items():
+            for xc_name, table_dict in xc_dict.items():
+                for table_name, table_dict in table_dict.items():
+                    for element, data in table_dict.items():
+                        for key, value in data.items():
+                          if key != "meta":
+                              print(f"{key=}")
+                              pseudo_path = os.path.join(self.path, value)
+                              try:
+                                  validate_file(pseudo_path)
+                              except Exception as exc:
+                                  errors.append(str(exc))
+                          else:
+                              # TODO: Validate meta?
+                              meta = value
+                              #print(f"{meta=}")
+
+        retcode = len(errors)
+        if retcode:
+            for msg in errors:
+                cprint(msg, color="red")
+
+        cprint(f"check {retcode=}", color="green" if retcode == 0 else "red")
+        return retcode
 
 
 def new(options) -> int:
@@ -598,6 +737,13 @@ def update(options) -> int:
     return 0
 
 
+def check(options) -> int:
+    """
+    Perform validation of the json files to make sure paths exists after deployment.
+    """
+    website = Website(".", options.verbose)
+    return website.check()
+
 
 def get_epilog() -> str:
     usage = """\
@@ -606,6 +752,7 @@ Usage example:
 
   deploy.py new     =>  Upload git repos and deploy website from scratch.
   deploy.py update  =>  Update git repos and a pre-existent website.
+  deploy.py check   =>  Check json files produced in ./json directory.
 """
     return usage
 
@@ -634,6 +781,9 @@ def get_parser(with_epilog=False):
     # Subparser for update command.
     p_update = subparsers.add_parser('update', parents=[copts_parser],
                                      help="Update git repos and a pre-existent website.")
+
+    # Subparser for check command.
+    p_check = subparsers.add_parser('check', parents=[copts_parser], help="Check files in json directory.")
 
     return parser
 
