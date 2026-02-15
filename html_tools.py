@@ -24,15 +24,22 @@ ONCV_TEMPLATE = env.from_string("""
   <title>{{ title }}</title>
   <!-- Include Plotly JS in the head -->
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <!-- Include clipboard JS in the head -->
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
 </head>
 
 <body>
 
 <h1>{{ title }}</h1>
 
-<!-- Show input file -->
+<!-- Show input file with a button to copy text -->
 <h2>oncvpsp input</h2>
-<pre><code> {{ input_str | e }} </code></pre>
+
+<pre><code id="input"> {{ input_str | e }} </code></pre>
+
+<button class="btn" data-clipboard-action="copy" data-clipboard-target="#input">
+Copy to clipboard
+</button>
 
 <!-- Show list of plots -->
 {% for plot in plots %}
@@ -42,6 +49,11 @@ ONCV_TEMPLATE = env.from_string("""
     {{ plot.html | safe }}
   </div>
 {% endfor %}
+
+<!-- Init libraries -->
+<script>
+new ClipboardJS('.btn');
+</script>
 
 </body>
 </html>
@@ -54,25 +66,37 @@ JTH_TEMPLATE = env.from_string("""
 <head>
   <meta charset="utf-8">
   <title>{{ title }}</title>
+  <!-- Include clipboard JS in the head -->
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
 </head>
 
 <body>
 
 <h1>{{ title }}</h1>
 
-<!-- Show input file -->
+<!-- Show input file with a button to copy text -->
 <h2>Atompaw input</h2>
-<pre><code> {{ input_str | e }} </code></pre>
+
+<pre><code id="input"> {{ input_str | e }} </code></pre>
+
+<button class="btn" data-clipboard-action="copy" data-clipboard-target="#input">
+Copy to clipboard
+</button>
+
 
 <!-- Show README file -->
 <h2>README (from github repo)</h2>
 {{ readme_str }}
 
+<!-- Init libraries -->
+<script>
+new ClipboardJS('.btn');
+</script>
+
 </body>
 </html>
 """
 )
-
 
 
 @dataclasses.dataclass(kw_only=True)
@@ -203,20 +227,19 @@ def write_html_from_jth_xml(xml_path: str) -> str:
     "Use Jinja2 to produce an HTML page for a single oncvps pseudo and write it to disk.
 
     Args:
-        out_path: Absolute path to the onvcpsp output file.
-        json_path: Absolute path to the json file with the validation results.
-            If file does not exist, ignore it as not all the pseudos have validation results.
+        xml_path: Absolute path to the atompaw xml pseudo.
 
     Returns: Absolute path to the HTML file produced.
     """
     dirpath = os.path.dirname(xml_path)
 
+    # Read input file
     input_path = xml_path.replace(".xml", ".atompaw.input")
     with open(input_path, "rt") as f:
         input_str =  f.read()
 
-    readme_path = os.path.join(dirpath, "README.md")
-    readme_str = md_to_html(readme_path)
+    # Read README.md and convert it to html.
+    readme_str = md_to_html(os.path.join(dirpath, "README.md"))
 
     html = JTH_TEMPLATE.render(
         title=f"JTH_TEMPLATE ",
@@ -236,7 +259,8 @@ if __name__ == "__main__":
     import sys
     if len(sys.argv) == 1 or "-h" in sys.argv or "--help" in sys.argv:
         print("This module can be executed as a standalone script to facilitate developments")
-        print("Syntax: `python html_tools.py Si.out`")
+        print("Syntax for oncnvps: `python html_tools.py Si.out` ")
+        print("Syntax for atompaw: `python html_tools.py tables/ATOMPAW-PBE-JTHv2.0/Si/Si.GGA_PBE-JTH.xml`")
         sys.exit(1)
 
     path = sys.argv[1]
@@ -244,10 +268,9 @@ if __name__ == "__main__":
     if path.endswith(".out"):
         html_path = write_html_from_oncvpsp_outpath(sys.argv[1])
     elif path.endswith(".xml"):
-        # tables/ATOMPAW-PBE-JTHv2.0/Si/Si.GGA_PBE-JTH.xml
         html_path = write_html_from_jth_xml(path)
     else:
-        raise ValueError("File extensios should be either .out or .xml")
+        raise ValueError("File extension should be either .out or .xml")
 
     print(f"Opening {html_path} in browser...")
     import webbrowser

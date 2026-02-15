@@ -486,6 +486,8 @@ class Website:
             #_mk_onc(xc_name="PBEsol", relativity_type="FR", version="0.4"),
             #_mk_onc(xc_name="PBE", relativity_type="SR", version="0.4"),
             #_mk_onc(xc_name="PBE", relativity_type="FR", version="0.4"),  FIXME: checksum fails
+            #_mk_onc(xc_name="LDA", relativity_type="SR", version="0.4"),
+            #_mk_onc(xc_name="LDA", relativity_type="FR", version="0.4"),  FIXME: checksum fails
             #
             # JTH repositories.
             #
