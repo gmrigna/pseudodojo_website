@@ -246,57 +246,57 @@ img
 
 .plugin.bg_hydrogen
 {
-  background:#d16969; /*rgb(209,105,105)*/
+  background:#C5CEFF; 
 }
 
 .plugin.bg_alkali
 {
-  background:#d19292; /*rgb(209,146,146)*/
+  background:#A3B2D7;
 }
 
 .plugin.bg_alkaline
 {
-  background:#d1bd92; /*rgb(209,196,212)*/
+  background:#A7C0D2; 
 }
 
 .plugin.bg_transition_metal
 {
-  background:#a9c4d4; /*rgb(169,196,212)*/
+  background:#BBECE2; 
 }
 
 .plugin.bg_post_transition_metal
 {
-  background:#a3b2d6; /*rgb(163,178,214)*/
+  background:#C7E1C2; 
 }
 
 .plugin.bg_metalloid
 {
-  background:#bdd6a3; /*rgb(189,214,163)*/
+  background:#E3DFBE; 
 }
 
 .plugin.bg_nonmetal
 {
-  background:#d6a3be; /*rgb(214,163,190)*/
+  background:#E5C9A9;
 }
 
 .plugin.bg_halogen
 {
-  background:#d2d6a3; /*rgb(210,214,163)*/
+  background:#D29292;
 }
 
 .plugin.bg_noble_gas
 {
-  background:#c4cdff; /*rgb(196,205,255)*/
+  background:#D26969;
 }
 
 .plugin.bg_lanthanoid
 {
-  background:#edb8ff; /*rgb(237,184,255)*/
+  background:#DFF4EA;
 }
 
 .plugin.bg_actinoid
 {
-  background:#bf96ff; /*rgb(191,150,255)*/
+  background:#F4D6D6;
 }
 
 .plugin.bg_she

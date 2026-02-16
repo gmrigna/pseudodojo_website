@@ -333,16 +333,16 @@ class Website:
         self.repos = [
             # ONCVPSP repositories.
             _mk_onc(xc_name="PBEsol", relativity_type="SR", version="0.4"),
-            _mk_onc(xc_name="PBEsol", relativity_type="FR", version="0.4"),
-            _mk_onc(xc_name="PBE", relativity_type="SR", version="0.4"),
+#            _mk_onc(xc_name="PBEsol", relativity_type="FR", version="0.4"),
+#            _mk_onc(xc_name="PBE", relativity_type="SR", version="0.4"),
             #_mk_onc(xc_name="PBE", relativity_type="FR", version="0.4"),  FIXME: checksum fails
             #
             # JTH repositories.
             #
             # FIXME: These repos do no provide .txt files with pseudo list e.g. standard.txt, stringent
             # so we temporarily disable them.
-            _mk_jth(xc_name="LDA", relativity_type="SR", version="1.1"),
-            _mk_jth(xc_name="PBE", relativity_type="SR", version="1.1"),
+#            _mk_jth(xc_name="LDA", relativity_type="SR", version="1.1"),
+#            _mk_jth(xc_name="PBE", relativity_type="SR", version="1.1"),
         ]
 
 
