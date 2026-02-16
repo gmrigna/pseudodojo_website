@@ -375,7 +375,6 @@ function dynamic_dropdown(type){
   fmt.length = 0;
 
   document.getElementById('warning_box').innerHTML = "";
-  //set_warning(' this version is outdated')
 
   switch (type) {
     case "jth-sr-v2.0" :
@@ -393,6 +392,7 @@ function dynamic_dropdown(type){
       break;
 
     case "nc-sr-v0.4" :
+      //set_warning(' this version is outdated')
       // List of tables
       table.options[0] = new Option("standard", "standard");
       table.options[1] = new Option("stringent", "stringent");
@@ -410,6 +410,7 @@ function dynamic_dropdown(type){
       break;
 
     case "nc-fr-v0.4" :
+      //set_warning(' this version is outdated')
       // List of tables
       table.options[0] = new Option("standard", "standard");
       table.options[1] = new Option("stringent", "stringent");
@@ -568,8 +569,8 @@ function show_toast(text){
 
 
 function build_ui(){
-  document.getElementById('av').style.visibility = "hidden";
   // fill the options for XCF, TABLE and FMT based on the type.
+  document.getElementById('av').style.visibility = "hidden";
   set_options();
   load_set_info();
 
@@ -735,7 +736,6 @@ function build_ui(){
 
         // Force file download (whether supported by server).
         var query = '?download';
-
         window.open(sUrl + query, '_self');
     }
 

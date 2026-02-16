@@ -298,7 +298,7 @@ class PseudosRepo(abc.ABC):
             # Fetch data from github and copy data to self.path
             self.download_to(self.path)
         else:
-            print("Skipping download step as", self.path, "directory already exists")
+            print("Skipping download step as: ", self.path, "directory already exists")
 
         # Find the .txt files defining the tables provided by this repo.
         excluded = {
@@ -566,7 +566,7 @@ class Website:
             # FIXME: These repos do no provide .txt files with pseudo list e.g. standard.txt, stringent
             # so we temporarily disable them.
             _mk_jth(xc_name="PBE", relativity_type="SR", version="2.0"),
-            _mk_jth(xc_name="LDA", relativity_type="SR", version="2.0"),
+            #_mk_jth(xc_name="LDA", relativity_type="SR", version="2.0"),
         ]
 
     def build(self, from_scratch: bool) -> None:
@@ -646,12 +646,13 @@ class Website:
             json.dump(targz, fh, indent=2, sort_keys=True)
 
         size_mb = get_directory_size(tables_dirpath)
-        print("Total size of {tables_dirpath}: {size_mb} Mb")
+        print(f"Total size of {tables_dirpath}: {size_mb} Mb")
 
         print("Rember to execute `serve.sh` to test the web-server!")
 
     def check(self) -> int:
-        print("Validating json files with paths...")
+        """Validate json files, return exit status."""
+        print("Validating json files in json directory...")
 
         errors = []
 
@@ -668,7 +669,7 @@ class Website:
 
         repo_types = set(targz.keys())
         if repo_types != repo_types_in_index:
-            msg = f"In targz.json: {repo_types=} != {repo_types_in_index=}\nUpdate index.html"
+            msg = f"In targz.json: {repo_types=} != {repo_types_in_index=}\nUpdate index.html or remove repos from deploy.py"
             errors.append(msg)
 
         # targz[repo.type][repo.xc_name][table_name] = defaultdict(dict)
@@ -688,16 +689,16 @@ class Website:
 
         repo_types = set(files.keys())
         if repo_types != repo_types_in_index:
-            msg = f"In files.json: {repo_types=} != {repo_types_in_index=}\nUpdate index.html"
+            msg = f"In files.json: {repo_types=} != {repo_types_in_index=}\nUpdate index.html or remove repos from deploy.py"
             errors.append(msg)
 
+        # files[typ][xc_name][table_name][elm][fmt]
         for repo_type, xc_dict in files.items():
             for xc_name, table_dict in xc_dict.items():
                 for table_name, table_dict in table_dict.items():
                     for element, data in table_dict.items():
                         for key, value in data.items():
                           if key != "meta":
-                              print(f"{key=}")
                               pseudo_path = os.path.join(self.path, value)
                               try:
                                   validate_file(pseudo_path)

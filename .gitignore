@@ -1,5 +1,5 @@
 tables/*
-#json/*
+json/*
 
 web_server.stderr
 web_server.stdout
