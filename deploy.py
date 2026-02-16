@@ -102,9 +102,9 @@ def make_oncv_html(dirpath, prefix, from_scratch):
     #   Ag-sp.out
     #   Ag-sp.psp8
 
-    #print(f"{dirpath=}, {prefix=}")
     out_path = os.path.join(dirpath, prefix + ".out")
     html_path = os.path.join(dirpath, prefix + ".html")
+    #print(f"{dirpath=}, {prefix=}, {out_path=}")
     if not from_scratch and os.path.exists(html_path):
         print(f"Won't regenerate HTML file: {html_path=}")
         return
@@ -320,8 +320,8 @@ class PseudosRepo(abc.ABC):
 
         # Preparing args required to build HTML pages.
         unique_paths = sorted(set(p for l in relpaths_table.values() for p in l))
-        nprocs = max(1, cpu_count() // 2)
-        #nprocs = 1
+        #nprocs = max(1, cpu_count() // 2)
+        nprocs = 1
 
         if self.ps_generator == "ONCVPSP":
             function = make_oncv_html
@@ -563,8 +563,6 @@ class Website:
             #
             # JTH repositories.
             #
-            # FIXME: These repos do no provide .txt files with pseudo list e.g. standard.txt, stringent
-            # so we temporarily disable them.
             _mk_jth(xc_name="PBE", relativity_type="SR", version="2.0"),
             #_mk_jth(xc_name="LDA", relativity_type="SR", version="2.0"),
         ]
