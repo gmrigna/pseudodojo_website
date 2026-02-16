@@ -7,7 +7,7 @@ html{
 body{
   position:relative;
   background:#e3e3e3;
-  background-image:url('../img/pw_maze_white.png');
+  /*background-image:url('../img/pw_maze_white.png');*/
   font-family:Helvetica,Arial,sans-serif;
   font-weight:normal;
   font-size:12px;

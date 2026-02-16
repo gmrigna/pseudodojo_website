@@ -332,7 +332,7 @@ class Website:
 
         self.repos = [
             # ONCVPSP repositories.
-            _mk_onc(xc_name="PBEsol", relativity_type="SR", version="0.4"),
+#            _mk_onc(xc_name="PBEsol", relativity_type="SR", version="0.4"),
 #            _mk_onc(xc_name="PBEsol", relativity_type="FR", version="0.4"),
 #            _mk_onc(xc_name="PBE", relativity_type="SR", version="0.4"),
             #_mk_onc(xc_name="PBE", relativity_type="FR", version="0.4"),  FIXME: checksum fails
