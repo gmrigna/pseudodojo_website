@@ -22,17 +22,17 @@ const ALL_ELEMENTS = [
 
 
 const COLORS = {
-  "bg_hydrogen": "#d16969",
-  "bg_alkali": "#d19292",
-  "bg_alkaline": "#d1bd92",
-  "bg_transition_metal":"#a9c4d4",
-  "bg_post_transition_metal": "#a3b2d6",
-  "bg_metalloid": "#bdd6a3",
-  "bg_nonmetal": "#d6a3be",
-  "bg_halogen": "#d2d6a3",
-  "bg_noble_gas": "#c4cdff",
-  "bg_lanthanoid": "#edb8ff",
-  "bg_actinoid": "#bf96ff",
+  "bg_hydrogen": "#C5CEFF",
+  "bg_alkali": "#A3B2D7",
+  "bg_alkaline": "#A7C0D2",
+  "bg_transition_metal":"#BBECE2",
+  "bg_post_transition_metal": "#C7E1C2",
+  "bg_metalloid": "#E3DFBE",
+  "bg_nonmetal": "#E5C9A9",
+  "bg_halogen": "#D29292",
+  "bg_noble_gas": "#D26969",
+  "bg_lanthanoid": "#DFF4EA",
+  "bg_actinoid": "#F4D6D6",
   "bg_she": "#82E0AA"
 };
 
