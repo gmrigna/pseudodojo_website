@@ -239,7 +239,7 @@ class OncvpspRepo(PseudosRepo):
         with open(path, "r") as fh:
             data = json.load(fh)
             hints = data["hints"]
-            # parse the pseudo to geh the number of valence electrons.
+            # parse the pseudo to get the number of valence electrons.
             pseudo_path = os.path.join(dirname, data["basename"])
             pseudo = Pseudo.from_file(pseudo_path)
 
@@ -332,7 +332,7 @@ class Website:
 
         self.repos = [
             # ONCVPSP repositories.
-#            _mk_onc(xc_name="PBEsol", relativity_type="SR", version="0.4"),
+            _mk_onc(xc_name="PBEsol", relativity_type="SR", version="0.4"),
 #            _mk_onc(xc_name="PBEsol", relativity_type="FR", version="0.4"),
 #            _mk_onc(xc_name="PBE", relativity_type="SR", version="0.4"),
             #_mk_onc(xc_name="PBE", relativity_type="FR", version="0.4"),  FIXME: checksum fails
