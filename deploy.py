@@ -8,18 +8,33 @@ import tempfile
 import argparse
 import abc
 import json
+<<<<<<< HEAD
 import shutil
 import subprocess
+=======
+#import posixpath
+#import tempfile
+#import shutil
+#import hashlib
+#import requests
+>>>>>>> lorien/landing
 
 from pathlib import Path
 from collections import defaultdict
+<<<<<<< HEAD
 from multiprocessing import Pool, cpu_count
+=======
+#from urllib.parse import urlsplit
+>>>>>>> lorien/landing
 #from tqdm import tqdm
 from monty.termcolor import cprint
 from pymatgen.io.abinit.pseudos import Pseudo, PawXmlSetup
 from abipy.flowtk.psrepos import download_repo_from_url  # md5_for_filepath
 
+<<<<<<< HEAD
 from html_tools import write_html_from_oncvpsp_outpath, write_html_from_jth_xml
+=======
+>>>>>>> lorien/landing
 
 
 ALL_ELEMENTS = set([
@@ -37,6 +52,7 @@ ALL_ELEMENTS = set([
 ])
 
 
+<<<<<<< HEAD
 def write_and_run_script(target_dir: str, repo: str, subdir: str) -> None:
     target_dir = Path(target_dir).resolve()
     print(f"Cloning {repo=}, in {subdir=}\nworking in {target_dir}")
@@ -220,6 +236,8 @@ def validate_file(path: str | Path) -> Path:
 
     return p.resolve()
 
+=======
+>>>>>>> lorien/landing
 
 class PseudosRepo(abc.ABC):
     """
@@ -234,7 +252,7 @@ class PseudosRepo(abc.ABC):
             ps_generator: Name of the pseudopotential generator.
             xc_name: XC functional.
             relativity_type: SR for scalar-relativistic or FR for fully relativistic.
-            project_name: Name of the project associated to this repository.
+            project_name: Name of the project associated with this repository.
             version: Version string.
             url: URL from which the targz will be fetched.
         """
@@ -288,7 +306,7 @@ class PseudosRepo(abc.ABC):
             1) Download the tarball from the github url, unpack it and save it in the self.name directory.
             2) Build list of tables by extracting the relative paths from the `table_name.txt` files.
                found in the top-level directory and build self.tables
-            3) Create targz files with all pseudos associated to a given table.
+            3) Create targz files with all pseudos associated with a given table.
         """
         doit = from_scratch or (not from_scratch and not os.path.isdir(self.name))
         self.path = os.path.join(workdir, self.name)
@@ -441,7 +459,7 @@ class OncvpspRepo(PseudosRepo):
         with open(path, "r") as fh:
             data = json.load(fh)
             hints = data["hints"]
-            # parse the pseudo to geh the number of valence electrons.
+            # parse the pseudo to get the number of valence electrons.
             pseudo_path = os.path.join(dirname, data["basename"])
             pseudo = Pseudo.from_file(pseudo_path)
 
