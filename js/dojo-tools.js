@@ -2,7 +2,7 @@
 
 //-------------------------------------------------------------- General definitions
 
-const DEBUG = true;
+const DEBUG = false;
 
 const ANIMATE = 1;
 
