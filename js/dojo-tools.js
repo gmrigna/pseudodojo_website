@@ -221,31 +221,40 @@ function build_ui(){
 
     //Sets what happens when element is clicked
     $('.plugin').on('click', function() {
-    
+
       var mythis = $(this);
       var sel = _get_pseudo_selection(mythis);
-    
-      if (!sel.url) {
-        show_toast("Sorry but this file is not available!");
-        return;
-      }
-    
+
       // 🔑 Determine mode
       var isValidation = document.getElementById("modeToggle").checked;
-    
+
       // =========================
       // VALIDATION MODE
       // =========================
       if (isValidation) {
-        const url = `/validation/${sel.element || mythis.text().trim()}.html`;
-        window.open(url, '_blank');
+        // Look up the html test report URL from FILES
+        try {
+          var htmlUrl = FILES[sel.type][sel.xcf][sel.acc][sel.elm]["html"];
+        } catch (e) {
+          var htmlUrl = null;
+        }
+        if (htmlUrl) {
+          window.open(htmlUrl, '_blank');
+        } else {
+          show_toast("No test report available for this element.");
+        }
         return;
       }
-    
+
       // =========================
       // DOWNLOAD MODE (existing behavior)
       // =========================
-    
+
+      if (!sel.url) {
+        show_toast("Sorry but this file is not available!");
+        return;
+      }
+
       if (sel.fmt === 'html') {
         $.get(sel.url)
           .done(function() {
@@ -254,7 +263,7 @@ function build_ui(){
           .fail(function() {
             show_toast("File not found.");
           });
-    
+
       } else {
         $.get(sel.url)
           .done(function() {
