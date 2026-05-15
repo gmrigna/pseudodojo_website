@@ -8,34 +8,18 @@ import tempfile
 import argparse
 import abc
 import json
-<<<<<<< HEAD
 import shutil
 import subprocess
-=======
-#import posixpath
-#import tempfile
-#import shutil
-#import hashlib
-#import requests
->>>>>>> lorien/landing
 
 from pathlib import Path
 from collections import defaultdict
-<<<<<<< HEAD
 from multiprocessing import Pool, cpu_count
-=======
-#from urllib.parse import urlsplit
->>>>>>> lorien/landing
 #from tqdm import tqdm
 from monty.termcolor import cprint
 from pymatgen.io.abinit.pseudos import Pseudo, PawXmlSetup
 from abipy.flowtk.psrepos import download_repo_from_url  # md5_for_filepath
 
-<<<<<<< HEAD
 from html_tools import write_html_from_oncvpsp_outpath, write_html_from_jth_xml
-=======
->>>>>>> lorien/landing
-
 
 ALL_ELEMENTS = set([
   'H', 'He',
@@ -52,7 +36,6 @@ ALL_ELEMENTS = set([
 ])
 
 
-<<<<<<< HEAD
 def write_and_run_script(target_dir: str, repo: str, subdir: str) -> None:
     target_dir = Path(target_dir).resolve()
     print(f"Cloning {repo=}, in {subdir=}\nworking in {target_dir}")
@@ -235,9 +218,6 @@ def validate_file(path: str | Path) -> Path:
         raise ValueError(f"File is not readable or corrupted: {p}") from e
 
     return p.resolve()
-
-=======
->>>>>>> lorien/landing
 
 class PseudosRepo(abc.ABC):
     """

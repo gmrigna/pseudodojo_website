@@ -2,24 +2,12 @@
 
 //-------------------------------------------------------------- General definitions
 
-const DEBUG = false;
+const DEBUG = true;
 
 const ANIMATE = 1;
 
 const ALL_KEYS = ['hh', 'hl', 'hn', 'nv'];
 
-//const ALL_ELEMENTS = [
-//  'H', 'He',
-//  'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne','Na', 'Mg', "Al", "Si", 'P', 'S', 'Cl', 'Ar',
-//  'K', 'Ca', 'Sc', 'Ti', 'V', 'Cr', 'Mn', 'Fe','Co','Ni','Cu','Zn','Ga','Ge','As','Se','Br','Kr',
-//  'Rb', 'Sr', 'Y', 'Zr', 'Nb', 'Mo', 'Tc', 'Ru', 'Rh', 'Pd', 'Ag', 'Cd', 'In', 'Sn', 'Sb', 'Te', 'I', 'Xe',
-//  'Cs', 'Ba',
-//  'La', 'Ce', 'Pr', 'Nd', 'Pm', 'Sm', 'Eu', 'Gd', 'Tb', 'Dy', 'Ho', 'Er','Tm','Yb', 'Lu',
-//  'Hf', 'Ta', 'W', 'Re', 'Os', 'Ir', 'Pt', 'Au', 'Hg', 'Tl', 'Pb', 'Bi', 'Po', 'At', 'Rn',
-//  "Fr", "Ra",
-//  "Ac", "Th", "Pa", "U", "Np", "Pu", "Am", "Cm", "Bk", "Cf", "Es", "Fm", "Md", "No", "Lr",
-//  "Rf", "Db", "Sg", "Bh", "Hs", "Mt", "Ds", "Rg", "Cn", "Nh", "Fl", "Mc", "Lv", "Ts", "Og"
-//  //"Uue", "Ubn"
 function humanize(size) {
         var units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
         var ord = Math.floor(Math.log(size) / Math.log(1024));
@@ -172,28 +160,19 @@ const pseudoDB = [
     type: "nc",
     rel: "sr",
     version: "0.4",
-    xc: ["PBE","PBEsol","LDA"],
-    formats: ["psp8","upf","psml","html","djrepo"],
+    xc: ["PBEsol"],
+    formats: ["psp8","upf","psml"],
     cite: "Citation 1",
     link: "https://link.to/citation/1/"
   },
   {
-    type: "nc",
-    rel: "fr",
-    version: "0.4",
-    xc: ["PBE","PBEsol"],
-    formats: ["psp8","upf","psml","html","djrepo"],
-    cite: "Citation 2",
-    link: "https://link.to/citation/2/"
-  },
-  {
     type: "paw",
     rel: "sr",
-    version: "1.1",
-    xc: ["PBE","LDA"],
+    version: "2.0",
+    xc: ["PBE"],
     formats: ["xml"],
-    cite: "Citation 3",
-    link: "https://link.to/citation/3/"
+    cite: "Citation 2",
+    link: "https://link.to/citation/2/"
   }
 ];
 
@@ -379,10 +358,21 @@ function build_ui(){
   });
 }
 
+//-------------------------------------------------------------- Compound key helper
+function getTypeKey() {
+  // Build the compound key used in FILES/TARGZ JSON, e.g. "nc-sr-v0.4" or "jth-sr-v2.0"
+  var type = document.getElementById('TYPE').value;
+  var rel = document.getElementById('REL').value;
+  var ver = document.getElementById('VER').value;
+  if (type === "paw") type = "jth";
+  return type + "-" + rel + "-v" + ver;
+}
+
 //-------------------------------------------------------------- Toggle
-const toggle = document.getElementById("modeToggle");
+let toggle;
 
 function getMode() {
+  if (!toggle) toggle = document.getElementById("modeToggle");
   return toggle.checked ? "validation" : "download";
 }
 
@@ -502,47 +492,6 @@ function getParameterByName(name) {
 }
 
 
-// function set_warning(txt) {
-//   // Set the text in the warning box
-//   var warningbox = document.getElementById('warning_box');
-//   warningbox.innerHTML = "<div class='alert warning'><span id='cbn' class='closebtn'>&times;</span><strong>Warning!</strong> ".concat(txt, "</div>");
-//   var close = document.getElementById("cbn");
-//   close.onclick = function(){
-//      var div = document.getElementById('warning_box');
-//      setTimeout(function(){div.innerHTML = "";}, 100);
-//   }
-// }
-// 
-// 
-// function make_light() {
-//     document.getElementById('FMT').value = 'psp8'
-//     const hide_classes = ["hide", "name", 'intro', "styled-longselect",
-//                           "selection_bar", "help_button", "description", "menubar"];
-//     for (cls of hide_class) {
-//         for (tohide of document.getElementsByClassName(hide_class)) {
-//             tohide.style.visibility = "hidden";
-//         }
-//     }
-// 
-//     document.getElementById('X_n').setAttribute("style","left:326px; top:91px; height:170px; width:140px;");
-//     document.getElementById('N').setAttribute("style","left:326px; top:91px; height:170px; width:140px; font-size=20px");
-//     document.getElementById("download_button").setAttribute("style","left:70px; top:151px; width:200px; height:55px; padding:15px");
-//     elements = document.getElementsByClassName('element')
-//     for (var i; i < elements.length; i++){
-//        elements[i].setAttribute('style', 'font-size:24px; margin-top:12px; line-height:1; text-align:center;');
-//     }
-//     document.getElementById("X_el").setAttribute('style', 'margin-top:20px;');
-//     document.getElementById("X_hl").setAttribute('style', 'font-size:20px; padding:2px');
-//     document.getElementById("X_hn").setAttribute('style', 'font-size:20px; padding:2px');
-//     document.getElementById("X_hh").setAttribute('style', 'font-size:20px; padding:2px');
-//     document.getElementById("X_nv").setAttribute('style', 'font-size:20px; margin-top:-158px; padding:2px');
-//     document.getElementById("det_test").setAttribute('style', 'font-size:20px; padding:2px');
-//     document.getElementById("det_hints").setAttribute('style', 'font-size:20px; margin-top:5px; padding:2px');
-//     document.getElementById("X_d").setAttribute('style', 'font-size:20px; padding:2px');
-//     document.getElementById("X_dp").setAttribute('style', 'font-size:20px; padding:2px');
-//     document.getElementById("X_gb").setAttribute('style', 'font-size:20px; padding:2px');
-// }
-
 function set_info(info) {
     var averages = {};
     var sums = {};
@@ -555,7 +504,7 @@ function set_info(info) {
         //console.log('in set_info with animate option');
         $('.plugin').removeClass('anim');
         $('.plugin').removeClass('chaos');
-        setTimeout("$('.plugin').addClass('anim')", 10)
+        setTimeout(() => $('.plugin').addClass('anim'), 10)
     }
 
     for (var el of elements) {
@@ -601,10 +550,10 @@ function set_info(info) {
 
 
 function load_set_info() {
-    var type = document.getElementById('TYPE').value;
+    var type = getTypeKey();
     var xcf = document.getElementById('XC').value;
     var acc = document.getElementById('ACC').value;
-    //if (DEBUG) console.log("In load_set_info with type:", type, "xcf:", xcf, "table:", table);
+    if (DEBUG) console.log("In load_set_info with type:", type, "xcf:", xcf, "acc:", acc);
 
     // Build dictionary element_symbol -> metadata.
     var meta = {};
@@ -661,9 +610,12 @@ function reset_X(){
 
 
 function set_average(vals){
-    document.getElementById('av_el').innerHTML = 'Mean'
+    var av_el = document.getElementById('av_el');
+    if (!av_el) return;  // average box not present in DOM
+    av_el.innerHTML = 'Mean';
     for (var key of ALL_KEYS) {
-        var node = document.getElementById("av_" + key)
+        var node = document.getElementById("av_" + key);
+        if (!node) continue;
         if (key === "nv") {
             node.innerHTML = "<small>n<sub>v</sub></small>" + vals[key];
         }
@@ -672,6 +624,7 @@ function set_average(vals){
         }
     }
 }
+
 
 function show_X(){
     // Show the X_n box.
@@ -682,15 +635,6 @@ function show_X(){
 function hide_X(){
     // Hide the X_n box.
     document.getElementById('X_n').style.visibility = "hidden";
-}
-
-
-function humanize(size) {
-	var units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
-	var ord = Math.floor(Math.log(size) / Math.log(1024));
-	ord = Math.min(Math.max(0, ord), units.length - 1);
-	var s = Math.round((size / Math.pow(1024, ord)) * 100) / 100;
-	return s + ' ' + units[ord];
 }
 
 
@@ -757,101 +701,13 @@ function updateMenus() {
   //set_warning("info","In v0.5, the following elements have been updated for PBE: Ba, Bi, I, Pb, Po, Rb, Rn, S, Te, Tl, Xe. Use v0.4.1 for LDA or PBEsol.");
 }
 
-window.addEventListener("load", updateMenus);
-document.getElementById("TYPE").addEventListener("change", updateMenus);
-document.getElementById("REL").addEventListener("change", updateMenus);
-document.getElementById("VER").addEventListener("change", updateMenus);
-document.getElementById("XC").addEventListener("change", updateMenus);
-
-/*function dynamic_dropdown(type){
-  // Set the values of the XC/Table/Format widgets given the pseudo type.
-  if (DEBUG) console.log('dynamic dropdown: setting for type:', type);
-  var table = document.getElementById("TABLE");
-  var xcf = document.getElementById("XCF");
-  var fmt = document.getElementById("FMT");
-  // Empty options before starting.
-  table.length = 0;
-  xcf.length = 0;
-  fmt.length = 0;
-
-  document.getElementById('warning_box').innerHTML = "";
-  //set_warning('warning',' this version is outdated')
-
-  switch (type) {
-    case "jth-sr-v2.0" :
-      // List of tables
-      table.options[0] = new Option("standard", "standard");
-      //table.options[1] = new Option("stringent", "stringent");
-      // List of XC functionals
-      xcf.options[0] = new Option("PBE", "PBE");
-      xcf.options[1] = new Option("LDA", "LDA");
-      // List of file formats
-      fmt.options[0] = new Option("xml", "xml");
-      fmt.options[1] = new Option("upf", "UPF");
-      fmt.options[2] = new Option("html", "html");
-      //fmt.options[3] = new Option("djrepo", "djrepo");
-      break;
-
-    case "nc-sr-v0.4" :
-      //set_warning(' this version is outdated')
-      // List of tables
-      table.options[0] = new Option("standard", "standard");
-      table.options[1] = new Option("stringent", "stringent");
-      //table.options[2] = new Option("f-frozen", "f-frozen");
-      // List of XC functionals
-      xcf.options[0] = new Option("PBE", "PBE");
-      xcf.options[1] = new Option("PBEsol", "PBEsol");
-      xcf.options[2] = new Option("LDA", "LDA");
-      // List of file formats
-      fmt.options[0] = new Option("psp8", "psp8");
-      fmt.options[1] = new Option("upf", "upf");
-      fmt.options[2] = new Option("psml", "psml");
-      fmt.options[3] = new Option("html", "html");
-      fmt.options[4] = new Option("djrepo", "djrepo");
-      break;
-
-    case "nc-fr-v0.4" :
-      //set_warning(' this version is outdated')
-      // List of tables
-      table.options[0] = new Option("standard", "standard");
-      table.options[1] = new Option("stringent", "stringent");
-      // List of XC functionals
-      xcf.options[0] = new Option("PBE", "PBE");
-      xcf.options[1] = new Option("PBEsol", "PBEsol");
-      //xcf.options[2] = new Option("LDA", "LDA");
-      // List of file formats
-      fmt.options[0] = new Option("psp8", "psp8");
-      fmt.options[1] = new Option("upf", "upf");
-      fmt.options[2] = new Option("psml", "psml");
-      fmt.options[3] = new Option("html", "html");
-      fmt.options[4] = new Option("djrepo", "djrepo");
-      break;
-
-    //case "nc-sr-04-3plus" :
-    //  set_warning("warning," this table contains Lanthanide potentials for use in the 3+ configuration only. " +
-    //            "<b>They all have the f-electrons frozen in the core.</b> " +
-    //            "The hints are based on the convergence of the nitride lattice parameter, see the report under format:html for details.");
-    //  table.options[0] = new Option("standard", "standard");
-    //  xcf.options[0] = new Option("PBE", "PBE");
-    //  fmt.options[0] = new Option("psp8", "psp8");
-    //  fmt.options[1] = new Option("upf", "upf");
-    //  fmt.options[2] = new Option("psml", "psml");
-    //  fmt.options[3] = new Option("html", "html");
-    //  fmt.options[4] = new Option("djrepo", "djrepo");
-    //  break;
-
-    //case "core" :
-    //  // TODO or perhaps add new format and handle file download.
-    //  document.getElementById("table").options[0] = new Option("", "standard");
-    //  document.getElementById("XCF").options[0] = new Option("PBE","pbe");
-    //  document.getElementById("FMT").options[2] = new Option("FC","fc");
-    //  break;
-    default:
-      //throw 'Invalid type: ' + type;
-      throw new Error(`Invalid type: ${type}`);
-  }
-}*/
-
+document.addEventListener("DOMContentLoaded", function() {
+  updateMenus();
+  document.getElementById("TYPE").addEventListener("change", updateMenus);
+  document.getElementById("REL").addEventListener("change", updateMenus);
+  document.getElementById("VER").addEventListener("change", updateMenus);
+  document.getElementById("XC").addEventListener("change", updateMenus);
+});
 
 //-------------------------------------------------------------- Select pseudo
 //Finds the url and other properties of the selected pseudopotential.
@@ -865,13 +721,11 @@ function _get_pseudo_selection(dom_object){
   var res = dum.split("_");
   var elm = res[1];                          //element code (e.g., C for carbon)
 
-  var type = $("#TYPE").val();               //NC or PAW
-  var rel = $("#REL").val();                 //Relativistic treatment
-  var vers = $("#VER").val();                //PD or JTH version
+  var type = getTypeKey();                   //Compound key e.g. "nc-sr-v0.4"
   var xcf = $("#XC").val();                  //XC functional
   var acc = $("#ACC").val();                 //Stringent or standard
   var fmt = $("#FMT").val();                 //Format type
-  
+
   try {
     var url = FILES[type][xcf][acc][elm][fmt];
   } 
@@ -894,8 +748,8 @@ function _get_pseudo_selection(dom_object){
 
 
 function _get_targz_selection(){
-  var type = $("#TYP").val();
-  var xcf = $("#XCF").val();
+  var type = getTypeKey();
+  var xcf = $("#XC").val();
   var acc = $("#ACC").val();
   var fmt = $("#FMT").val();
 
@@ -924,27 +778,26 @@ function set_options(){
     }
   }
 
-  // if XCF TABLE and FMT have been changed previously set them back to those selections 
-  if (localStorage.getItem('selectedXCF')) {
-    var options = document.getElementById('XCF').options
+  if (localStorage.getItem('selectedXC')) {
+    var options = document.getElementById('XC').options;
     for (var i in options){
-       if (options[i].value == localStorage.getItem('selectedXCF')){
+       if (options[i].value == localStorage.getItem('selectedXC')){
          options[i].selected = true;
        }
     }
   }
 
-  if (localStorage.getItem('selectedTABLE')) {
-    var options = document.getElementById('TABLE').options
+  if (localStorage.getItem('selectedACC')) {
+    var options = document.getElementById('ACC').options;
     for (var i in options){
-       if (options[i].value == localStorage.getItem('selectedTABLE')){
+       if (options[i].value == localStorage.getItem('selectedACC')){
          options[i].selected = true;
        }
     }
   }
 
   if (localStorage.getItem('selectedFMT')) {
-    var options = document.getElementById('FMT').options
+    var options = document.getElementById('FMT').options;
     for (var i in options){
        if (options[i].value == localStorage.getItem('selectedFMT')){
          options[i].selected = true;
@@ -975,7 +828,7 @@ function dojoTour_guidedtour() {
         {
           element: '#TYPE',
           intro: "Here, you'll select the type of pseudopotential— " +
-                 "either norm-conserving or projector-augmented wave (PAW)."
+                 "either norm-conserving (NC) or projector-augmented wave (PAW)."
         },
         {
           element: '#REL',
@@ -1064,8 +917,8 @@ function make_light() {
     document.getElementById('FMT').value = 'psp8'
     const hide_classes = ["hide", "name", 'intro', "styled-longselect",
                           "selection_bar", "help_button", "description", "menubar"];
-    for (cls of hide_class) {
-        for (tohide of document.getElementsByClassName(hide_class)) {
+    for (const cls of hide_classes) {
+        for (const tohide of document.getElementsByClassName(cls)) {
             tohide.style.visibility = "hidden";
         }
     }
@@ -1095,7 +948,7 @@ function make_light() {
 function chaos() {
     $('.plugin').removeClass('anim');
     $('.plugin').removeClass('chaos');
-    setTimeout("$('.plugin').addClass('chaos')",10)
+    setTimeout(() => $('.plugin').addClass('chaos'), 10)
     var plugins = document.querySelectorAll(".plugin");
     for (var plugin of plugins) {
       animatePlugin(plugin);

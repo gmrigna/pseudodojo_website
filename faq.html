@@ -11,10 +11,9 @@
 <head>
 <title>Pseudo Dojo</title>
 <meta charset="utf-8"/>
+<meta name="viewport" content="width=1360">
 <link rel="stylesheet" href="css/style.css" />
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+
 </head>
 
 <body>
@@ -24,22 +23,11 @@
 <div class="wrapper">
 <div class="table">
   <aside class="infobox">
-    <div class="intro">
-      <h1 class="logo"><a href="index.html" title="The Pseudo Dojo">The Pseudo Dojo</a></h1>
-    </div>
-    <div class="download_button">
-     F.A.Q.
-    </div>
+    <a href="index.html" title="The Pseudo Dojo" style="position:absolute; left:100px; top:-80px; z-index:5;"><img src="img/logo.svg" style="height:150px; margin-top:6px;"></a>
     <div class="menubar">
-      <div class="menutext">
-        <p>
-          <a href="index.html"><span>Home</span></a>
-          <a href="contribute.html"><span>Contribute</span></a>
-          <a href="paperlist.html"><span>Papers</span></a>
-          <span style="padding-left: 5em">
-          <span><a href="about.html">About</a></span></span>
-        </p>
-      </div>
+      <span class="menuitem"><a href="index.html">Home</a></span>
+      <span class="menuitem"><a href="about.html">About</a></span>
+      <span class="menuitem"><a href="contribute.html">Contribute</a></span>
     </div>
 
 <div class="generaltext">
@@ -47,26 +35,35 @@
 
 <h2>&#9670; What are all these numbers?</h2>
 
-<div class="relative_position detail" id="legend">
-      <div class="element" id="X_el">X</div>
-      <div class="l_top">hints (Ha)</div>
-      <div class="l_follow" id="X_hl" title="low cutoff energy hint (Ha)">low</div>
-      <div class="l_follow" id="X_hn" title="normal cutoff energy hint (Ha)">normal</div>
-      <div class="l_follow" id="X_hh" title="high cutoff energy hint (Ha)">high</div>
-      <div class="valence" id="X_nv" title="number of valence shells">nv</div>
-      <!--
-      <div class="r_top" >tests</div>
-      <div class="r_follow" id="X_d" title="delta gauge (meV):&#013;Integral between the equation of state calculated using the pseudo potential &#013;and a reference all electron equation of state.">delta</div>
-      <div class="r_follow" id="X_dp" title="normalized delta gauge:&#013;Normalized version of the delta gauge.">delta1</div>
-      <div class="r_follow" id="X_gb" title="gbrv fcc bcc average (%):&#013;Relative error in the lattice parameter with respect to reference&#013;all electron results for elemental fcc and bcc structures.">gbrv</div>
-      -->
-</div>
+<div class="detail-wrap" style="position:relative; display:block; margin: 20px 0 20px 100px;">
+  <div class="detail" id="X_n">
+    <div class="zee" id="X_z">Z</div>
+    <div class="valence" id="X_nv">#</div>
+    <div class="levels" id="LEVS">
+      <div id="X_hl">low</div>
+      <div id="X_hn">middle</div>
+      <div id="X_hh">high</div>
+    </div>
+    <div class="element" id="X_el">X</div>
+    <div class="name" id="X_name">element name</div>
+  </div>
 
-The number in the upper right corner of the element boxes (nv) give how many 
+  <!-- Labels -->
+  <div class="label label-z">atomic number</div>
+  <div class="label label-nv">number of valence orbitals</div>
+  <div class="label label-ecut">e<sub>cut</sub> hints</div>
+
+  <!-- Squiggles -->
+  <img class="squiggles atnum" src="img/z_squiggle.svg"/>
+  <img class="squiggles bracket" src="img/bracket.svg"/>
+  <img class="squiggles vale" src="img/nv_squiggle.svg"/>
+</div>
+<br>
+The number in the upper right corner of the element boxes give how many 
 valence electrons are included in this pseudopotential.
 <BR>
 <BR>
-The numbers in lower left corner (hints) represent the cutoff hints in Hartree.
+The numbers on the right in the middle (hints) represent the cutoff hints in Hartree.
 The exact meaning of the hints can be found in the corresponding 
 <a href="https://doi.org/10.1016/j.cpc.2018.01.012">paper</a> suggested below.
 In general, low is a good starting point for your convergence studies.
@@ -159,7 +156,7 @@ Computer Physics Communications 185, 1246 (2013)<BR>
 
 Yes, please feel free to do so, you can download it here:
 
-<table cellpadding="10"><tr><td><img src="img/logo.svg"></td><td>or</td><td><img src="img/logo_small.svg"></td></tr></table>
+<table cellpadding="10"><tr><td><img src="img/logo.svg"></td><td>or</td><td><img src="img/logo_dark.svg" style="width:50%;"></td></tr></table>
 
 
 <H1>Concerning the ONCVPSP pseudopotentials</H1>

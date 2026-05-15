@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <link rel="icon" type="image/x-icon" href="/img/favicon.png">
+
 
   <!-- Toastify -->
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
@@ -43,100 +43,8 @@
 
 <body> <!-- Includes background image (light grey logo and white lines) styled in CSS -->
 
-  <!-- Main menu, top right -->
-  <div class="menubar">
-    <div class="menutext">
-        <span class="menuitem"><a href="about.html">About</a></span>
-        <span class="menuitem"><a href="faq.html">F.A.Q.</a></span>
-        <span class="menuitem"><a href="contribute.html">Contribute</a></span>
-    </div>
-  </div>
-
   <!-- Warning box -->
   <div id="warning_box"></div>
-
-  <!-- Intro Stuff (Logo, selectors, etc.) -->
-  <div class="intro">
-    <!-- Pseudo Dojo Logo -->
-    <a href="https://youtu.be/j9z4AJIx40M" target="_blank" title="The Pseudo Dojo"><img src="../img/logo.svg" class="logo hide"></a>
-
-    <!-- Large Arrow -->
-    <div class="arrow" id="MainArrow">
-      <img src="../img/arrow.svg" class="arrow">
-    </div>
-
-    <!-- Quick Tutorial button -->
-    <button class="help_button" onclick="dojoTour_guidedtour()" id="guided-tour-button" title="Guided Tour" >
-      Quick Tutorial
-    </button>
-
-    <!-- Toggle for Download Mode or Testing Mode -->
-    <div class="mode-wrapper" id="DojoMode">
-      <span class="toggle-label">Click on an element to:</span>
-      <div class="mode-toggle">
-        <span class="mode-label left" style="text-align: right;">Download pseudo</span>
-        <label class="switch">
-          <input type="checkbox" id="modeToggle"  aria-label="Toggle between pseudo download mode and validation testing mode">
-          <span class="slider"></span>
-        </label>
-        <span class="mode-label right">See test results</span>
-      </div>
-    </div>
-
-    <!-- Pseudo selection bar -->
-    <div class="selection_bar">
-
-      <!-- Selection of TYPE -->
-      <div class="selector">
-        <label for="TYPE">Type:</label>
-        <select id="TYPE" onchange="load_set_info();">
-          <option value="nc">Norm-Conserving</option>
-          <option value="paw">PAW</option>
-        </select>
-      </div>
-
-      <!-- Selection of RELATIVISTIC -->
-      <div class="selector">
-        <label for="REL">Relativistic:</label>
-        <select id="REL" style="width: 75px;">
-          <option value="sr">Scalar</option>
-          <option value="fr">Fully</option>
-        </select>
-      </div>
-
-      <!-- Selection of VERSION -->
-      <div class="selector">
-        <label for="VER">Version:</label>
-        <select id="VER" style="width: 60px;"></select>
-      </div>
-
-      <!-- Selection of XC functional -->
-      <div class="selector">
-        <label for="XC">XC:</label>
-        <select id="XC" style="width: 80px;" onchange="localStorage.setItem('selectedXCF', document.getElementById('XCF').value); load_set_info();"></select>
-      </div>
-
-      <!-- Selection of ACCURACY -->
-      <div class="selector">
-        <label for="ACC">Accuracy:</label>
-        <select id="ACC" style="width: 100px;">
-          <option value="standard">Standard</option>
-          <option value="stringent">Stringent</option>
-        </select>
-      </div>
-
-      <!-- Selection of FORMAT -->
-      <div class="selector">
-        <label for="FMT">Format:</label>
-        <select id="FMT" style="width: 75px;" onchange="localStorage.setItem('selectedFMT', document.getElementById('FMT').value);"></select>
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- Citation box -->
-  <div id="citebox" class="citation_box"></div>
 
 <!--  <div class="selection_bar">
     <table style="color:#FFFFFF;margin-top:0px; font-size: 16px;">
@@ -187,7 +95,90 @@
 
   <div class="wrapper">
     <div class="table">
-  
+
+      <!-- Intro Stuff (Logo, selectors, etc.) -->
+      <div class="intro">
+        <!-- Pseudo Dojo Logo -->
+        <a href="https://youtu.be/j9z4AJIx40M" target="_blank" title="The Pseudo Dojo"><img src="img/logo.svg" class="logo hide"></a>
+
+        <!-- Large Arrow -->
+        <div class="arrow" id="MainArrow">
+          <img src="img/arrow.svg" class="arrow">
+        </div>
+
+        <!-- Quick Tutorial button -->
+        <button class="help_button" onclick="dojoTour_guidedtour()" id="guided-tour-button" title="Guided Tour" >
+          Quick Tutorial
+        </button>
+
+        <!-- Toggle for Download Mode or Testing Mode -->
+        <div class="mode-wrapper" id="DojoMode">
+          <span class="toggle-label">Click on an element to:</span>
+          <div class="mode-toggle">
+            <span class="mode-label left" style="text-align: right;">Download pseudo</span>
+            <label class="switch">
+              <input type="checkbox" id="modeToggle"  aria-label="Toggle between pseudo download mode and validation testing mode">
+              <span class="slider"></span>
+            </label>
+            <span class="mode-label right">See test results</span>
+          </div>
+        </div>
+
+        <!-- Pseudo selection bar -->
+        <div class="selection_bar">
+
+          <!-- Selection of TYPE -->
+          <div class="selector" style="width: 160px;">
+            <label for="TYPE">Type:</label>
+            <select id="TYPE" style="width: 75px;" onchange="load_set_info();">
+              <option value="nc">NC</option>
+              <option value="paw">PAW</option>
+            </select>
+          </div>
+
+          <!-- Selection of RELATIVISTIC -->
+          <div class="selector" style="width: 160px;">
+            <label for="REL">Relativ.:</label>
+            <select id="REL" style="width: 75px;">
+              <option value="sr">SR</option>
+              <option value="fr">FR</option>
+            </select>
+          </div>
+
+          <!-- Selection of VERSION -->
+          <div class="selector" style="width: 160px;">
+            <label for="VER">Version:</label>
+            <select id="VER" style="width: 75px;"></select>
+          </div>
+
+          <!-- Selection of XC functional -->
+          <div class="selector" style="width: 160px;">
+            <label for="XC">XC:</label>
+            <select id="XC" style="width: 75px;" onchange="localStorage.setItem('selectedXC', document.getElementById('XC').value); load_set_info();"></select>
+          </div>
+
+          <!-- Selection of ACCURACY -->
+          <div class="selector" style="width: 160px;">
+            <label for="ACC">Accuracy:</label>
+            <select id="ACC" style="width: 75px;" onchange="localStorage.setItem('selectedACC', document.getElementById('ACC').value); load_set_info();">
+              <option value="standard">Standard</option>
+              <option value="stringent">Stringent</option>
+            </select>
+          </div>
+
+          <!-- Selection of FORMAT -->
+          <div class="selector" style="width: 160px;">
+            <label for="FMT">Format:</label>
+            <select id="FMT" style="width: 75px;" onchange="localStorage.setItem('selectedFMT', document.getElementById('FMT').value);"></select>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Citation box -->
+      <div id="citebox" class="citation_box"></div>
+
       <div id="periodic-table"></div>
 
       <div class="detail-wrap">
@@ -210,12 +201,19 @@
         <div class="label label-ecut">e<sub>cut</sub> hints</div>
 
         <!-- Squiggles -->
-        <img class="squiggles atnum" src="../img/z_squiggle.svg"></img>
-        <img class="squiggles bracket" src="../img/bracket.svg"></img>
-        <img class="squiggles vale" src="../img/nv_squiggle.svg"></img>
+        <img class="squiggles atnum" src="img/z_squiggle.svg">/>
+        <img class="squiggles bracket" src="img/bracket.svg">/>
+        <img class="squiggles vale" src="img/nv_squiggle.svg">/>
       </div>
 
       <div id="download_button" class="download_button">Download Table</div>
+
+      <!-- Main menu, top right -->
+      <div class="menubar">
+        <span class="menuitem"><a href="about.html">About</a></span>
+        <span class="menuitem"><a href="faq.html">F.A.Q.</a></span>
+        <span class="menuitem"><a href="contribute.html">Contribute</a></span>
+      </div>
 
     </div>
 

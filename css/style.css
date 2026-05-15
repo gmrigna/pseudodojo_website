@@ -1,5 +1,23 @@
 @charset "utf-8";
 
+/* ------------------------------------------------------ RESET */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
 /* ------------------------------------------------------ GENERAL */
 html{font-size:100%;}
 
@@ -45,10 +63,18 @@ body {
   z-index: 1;
 } */
 
+body {
+  min-width: 1360px;
+}
+
 body::before {
   content: "";
-  position: fixed;
-  inset: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-width: 1360px;
   pointer-events: none;
   z-index: 0;
   background-repeat: no-repeat;
@@ -75,7 +101,7 @@ body::before {
     50px 4px,
     50px 4px;
   background-position:
-    calc(59vw - 140px) calc(18vh - 140px),
+    calc(50% + 100px) 15px,
     calc(50% - 645px) 0,
     calc(50% + 670px) 0,
     calc(50% + 620px) 0,
@@ -89,32 +115,26 @@ body::before {
 
 /* ------------------------------------------------------ MAIN MENU */
 .menubar {
-  position:fixed;
-  display: inline-block;
-  right:5%;
-  top:0px;
+  position:absolute;
+  display: flex;
+  justify-content: flex-end;
+  right:0px;
+  top:-80px;
   z-index:5;
-  width:415px;
-  height:30px;
-  -webkit-transition:all 0.5s ease-out;
-  -moz-transition:all 0.5s ease-out;
   transition:all 0.5s ease-out;
-  -webkit-box-sizing:border-box;
-  -moz-box-sizing:border-box;
-  -o-box-sizing:border-box;
-  box-sizing:border-box;
 }
 
 .menuitem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: #444444;
   width: 125px;
-  height: 30px;
-  padding: 20px 15px 15px 15px;
+  height: 45px;
+  padding: 8px 15px;
   margin: 0px 5px 0px 5px;
-  -moz-border-radius: 0px;
-  -webkit-border-radius: 0px 0px 6px 6px;
   border-radius: 0px 0px 6px 6px;
-  -webkit-box-shadow:0 1px 3px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.25);
 }
 
 .menuitem a {
@@ -123,8 +143,6 @@ body::before {
   font-weight:bold;
   color: white;
   text-align: center;
-  vertical-align: middle;
-  line-height: 50px;
 }
 
 .menuitem:hover,
@@ -136,8 +154,8 @@ body::before {
 .intro {
   position: absolute;
   width: 700px;
-  left: calc(50% - 490px);
-  top: 0px;
+  left: 100px;
+  top: -80px;
   height: 300px;
   display: flex;
   align-items: flex-start;
@@ -245,7 +263,10 @@ body::before {
 /* Track */
 .slider {
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   background-color: #ccc;
   border-radius: 22px;
   cursor: pointer;
@@ -282,20 +303,23 @@ body::before {
 .selector {
   display: flex;
   flex-direction: row;
-  height: 25px;
+  align-items: center;
+  justify-content: space-between;
   background:  #444444;
-  padding: 5px 5px;
+  padding: 4px 5px;
   border-radius: 5px;
 }
 
 .selector label {
-  font-size: 15px;
-  margin-bottom: 4px;
+  font-size: 14px;
   color: #ffffff;
   padding-left: 5px;
+  white-space: nowrap;
 }
 
 .selector select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
   appearance: none;
   margin-left: 10px;
   padding: 4px 6px;
@@ -306,6 +330,9 @@ body::before {
   color: #333;
   cursor: pointer;
   width: 150px;
+  text-align: center;
+  text-align-last: center;
+  -moz-text-align-last: center;
 }
 
 .selector select:hover,
@@ -315,37 +342,34 @@ body::before {
 
 .citation_box {
   position: absolute;
-  left: 750px;
-  top: 75px;
-  width: 29vw;
-  height: 40px;
+  left: 759px;
+  top: 0px;
+  width: 335px;
+  height: 48px;
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
   z-index: 10;
 }
 
 .citation_box .pleasecite {
+  flex-shrink: 0;
   width: 70px;
-  height: 35px;
   background: #00B89C;
   color: white;
-  padding: 5px;
-  font-size: 16;
+  padding: 6px 8px;
+  font-size: 13px;
   text-align: right;
-  -moz-border-radius: 0px;
-  -webkit-border-radius: 6px 0px 0px 6px;
+  line-height: 1.4;
   border-radius: 6px 0px 0px 6px;
 }
 
 .citation_box .citation {
-  display: block;
   background: #4D4D4D;
   color: white;
-  height: 35px;
-  padding: 5px;
-  -moz-border-radius: 0px;
-  -webkit-border-radius: 0px 6px 6px 0px;
+  padding: 6px 8px;
+  font-size: 13px;
   border-radius: 0px 6px 6px 0px;
+  line-height: 1.4;
 }
 
 .citation:hover,
@@ -531,6 +555,8 @@ body::before {
   margin:0 0 10px 10px;
   padding:2px;
   border:1px solid #A2A4A5;
+  line-height:normal;
+  text-align:left;
   -webkit-border-top-right-radius:2px;
   -webkit-border-bottom-right-radius:2px;
   -webkit-border-bottom-left-radius:2px;
@@ -910,6 +936,51 @@ body::before {
 
 .introjs-tooltip {
   font-size: 16px;
+}
+
+/* ------------------------------------------------------ SUB-PAGES (About, FAQ, Contribute) */
+.infobox {
+  padding-top: 100px;
+}
+
+.generaltext {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #4B4B4D;
+  max-width: 900px;
+}
+
+.generaltext h1 {
+  font-size: 28px;
+  margin: 30px 0 15px 0;
+  color: #333;
+}
+
+.generaltext h2 {
+  font-size: 22px;
+  margin: 25px 0 10px 0;
+  color: #444;
+}
+
+.generaltext p {
+  margin: 10px 0;
+}
+
+.generaltext ul {
+  margin: 10px 0 10px 20px;
+}
+
+.generaltext li {
+  margin: 5px 0;
+}
+
+.generaltext table {
+  margin: 15px 0;
+  border-collapse: collapse;
+}
+
+.generaltext table td {
+  padding: 5px 15px 5px 0;
 }
 
 
