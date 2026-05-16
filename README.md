@@ -97,7 +97,7 @@ does not support hints.
 
 For each (NC) pseudo, the web app serves an HTML file with several plots such as radial wavefunctions,
 logders, l-dependent potentials, etc.
-All these figures can be automatically generated from the output file of oncvpsp so we prefer to generate the HTMl
+All these figures can be automatically generated from the output file of oncvpsp so we prefer to generate the HTML
 pages when we prepare the deployment rather than storying a bunch of HTML files in the repo itself.
 In the original version of the pseudodojo website we were also showing the results of the different
 validation tests (delta-gauge, GBVR benchmark, phonons, ghost test).

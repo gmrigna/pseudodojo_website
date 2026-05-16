@@ -26,33 +26,119 @@ ONCV_TEMPLATE = env.from_string("""
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <!-- Include clipboard JS in the head -->
   <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding-top: 50px;
+    }
+    h1, h2, pre, p, .plot, .btn {
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+    .plot .ytick text, .plot .xtick text {
+      font-size: 14px !important;
+    }
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 44px;
+      background: #2c3e50;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      z-index: 1000;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      overflow-x: auto;
+    }
+    nav a {
+      color: #ecf0f1;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 4px;
+      font-size: 14px;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    nav a:hover {
+      background: #34495e;
+    }
+    nav a.active {
+      background: #1abc9c;
+      color: #fff;
+    }
+    section {
+      scroll-margin-top: 56px;
+    }
+  </style>
 </head>
 
 <body>
 
+<nav id="navbar">
+  <a href="#section-input">Input</a>
+  <a href="#section-wavefunctions">Wavefunctions</a>
+  <a href="#section-logders">Log. Derivatives</a>
+  <a href="#section-convergence">Convergence</a>
+  <a href="#section-projectors">Projectors</a>
+  <a href="#section-potential">Potential</a>
+  <a href="#section-corecharge">Core charge</a>
+</nav>
+
 <h1>{{ title }}</h1>
 
 <!-- Show input file with a button to copy text -->
-<h2>oncvpsp input</h2>
+<section id="section-input">
+<h2>ONCVPSP Input</h2>
 
 <pre><code id="input"> {{ input_str | e }} </code></pre>
 
 <button class="btn" data-clipboard-action="copy" data-clipboard-target="#input">
 Copy to clipboard
 </button>
+</section>
 
 <!-- Show list of plots -->
 {% for plot in plots %}
+  <section id="{{ plot.section_id }}">
   <h2>{{ plot.title }}</h2>
   <p>{{ plot.text }}</p>
   <div class="plot">
     {{ plot.html | safe }}
   </div>
+  </section>
 {% endfor %}
 
 <!-- Init libraries -->
 <script>
 new ClipboardJS('.btn');
+
+// Highlight active nav link on scroll
+(function() {
+  var sections = document.querySelectorAll('section[id]');
+  var navLinks = document.querySelectorAll('nav a');
+
+  function onScroll() {
+    var scrollPos = window.scrollY + 80;
+    var current = '';
+    sections.forEach(function(section) {
+      if (section.offsetTop <= scrollPos) {
+        current = section.getAttribute('id');
+      }
+    });
+    navLinks.forEach(function(link) {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('active');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', onScroll);
+  onScroll();
+})();
 </script>
 
 </body>
@@ -68,13 +154,62 @@ JTH_TEMPLATE = env.from_string("""
   <title>{{ title }}</title>
   <!-- Include clipboard JS in the head -->
   <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding-top: 50px;
+    }
+    h1, h2, pre, p, .btn, .readme-content {
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 44px;
+      background: #2c3e50;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      z-index: 1000;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    nav a {
+      color: #ecf0f1;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 4px;
+      font-size: 14px;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    nav a:hover {
+      background: #34495e;
+    }
+    nav a.active {
+      background: #1abc9c;
+      color: #fff;
+    }
+    section {
+      scroll-margin-top: 56px;
+    }
+  </style>
 </head>
 
 <body>
 
+<nav id="navbar">
+  <a href="#section-input">Input</a>
+  <a href="#section-readme">README</a>
+</nav>
+
 <h1>{{ title }}</h1>
 
 <!-- Show input file with a button to copy text -->
+<section id="section-input">
 <h2>Atompaw input</h2>
 
 <pre><code id="input"> {{ input_str | e }} </code></pre>
@@ -82,15 +217,44 @@ JTH_TEMPLATE = env.from_string("""
 <button class="btn" data-clipboard-action="copy" data-clipboard-target="#input">
 Copy to clipboard
 </button>
-
+</section>
 
 <!-- Show README file -->
+<section id="section-readme">
 <h2>README (from github repo)</h2>
+<div class="readme-content">
 {{ readme_str }}
+</div>
+</section>
 
 <!-- Init libraries -->
 <script>
 new ClipboardJS('.btn');
+
+// Highlight active nav link on scroll
+(function() {
+  var sections = document.querySelectorAll('section[id]');
+  var navLinks = document.querySelectorAll('nav a');
+
+  function onScroll() {
+    var scrollPos = window.scrollY + 80;
+    var current = '';
+    sections.forEach(function(section) {
+      if (section.offsetTop <= scrollPos) {
+        current = section.getAttribute('id');
+      }
+    });
+    navLinks.forEach(function(link) {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('active');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', onScroll);
+  onScroll();
+})();
 </script>
 
 </body>
@@ -105,6 +269,7 @@ class OncvData:
     html: str
     title: str
     text: str
+    section_id: str = ""
 
 
 def write_html_from_oncvpsp_outpath(out_path: str) -> str:
@@ -125,11 +290,31 @@ def write_html_from_oncvpsp_outpath(out_path: str) -> str:
     if plotter is None:
         raise RuntimeError(f"Cannot build plotter from {out_path=}")
 
-    def to_html(fig):
+    def to_html(fig, scale=0.8):
         """
         Convert from plotly figure to html that will then be included in the HTML page using Jinja2 template.
         Note: plotly.js is loaded in the template from CDN to reduce file size.
+        The scale parameter (default 0.8) reduces the figure size to 80%.
         """
+        # Scale figure dimensions
+        layout = fig.layout
+        w = layout.width or 700
+        h = layout.height or 450
+        fig.update_layout(
+            width=int(w * scale),
+            height=int(h * scale),
+            font=dict(size=16),
+            legend=dict(font_size=14),
+        )
+        # Apply font sizes to ALL axes (including subplots)
+        fig.update_xaxes(title_font_size=16, tickfont_size=14, gridwidth=1.5, tickwidth=2, ticklen=10,
+                         linecolor="black", linewidth=1.5, mirror=True)
+        fig.update_yaxes(title_font_size=16, tickfont_size=14, gridwidth=1.5, tickwidth=2, ticklen=10,
+                         linecolor="black", linewidth=1.5, mirror=True)
+        # Make curves thicker
+        for trace in fig.data:
+            if hasattr(trace, 'line') and trace.line is not None:
+                trace.update(line=dict(width=max(trace.line.width or 2, 2) + 1))
         return pio.to_html(fig, include_plotlyjs=False, full_html=False)
 
     plots = []
@@ -143,36 +328,42 @@ def write_html_from_oncvpsp_outpath(out_path: str) -> str:
         html=to_html(plotter.plot_radial_wfs(**kwargs)),
         title="AE and PS radial wavefunctions",
         text="These are the radial wavefunctions",
+        section_id="section-wavefunctions",
     ))
 
     app(OncvData(
         html=to_html(plotter.plot_atan_logders(**kwargs)),
         title="Arctan of the logarithmic derivatives",
         text="These are the famous ATAN LOGDERs signaling the presence of ghost states ...",
+        section_id="section-logders",
     ))
 
     app(OncvData(
         html=to_html(plotter.plot_kene_vs_ecut(**kwargs)),
         title="Convergence in  G-space estimated by ONCVPSP",
         text="kene_vs_ecut ...",
+        section_id="section-convergence",
     ))
 
     app(OncvData(
         html=to_html(plotter.plot_projectors(**kwargs)),
         title="Projectors",
         text="These are the projectors",
+        section_id="section-projectors",
     ))
 
     app(OncvData(
         html=to_html(plotter.plot_potentials(**kwargs)),
         title="Local potential and l -dependent potentials",
         text="These are the potentials",
+        section_id="section-potential",
     ))
 
     app(OncvData(
         html=to_html(plotter.plot_densities(**kwargs)),
         title="Core-Valence-Model charge densities",
         text="These are the densities",
+        section_id="section-corecharge",
     ))
 
     # This only for meta-gga pseudos.
@@ -181,12 +372,14 @@ def write_html_from_oncvpsp_outpath(out_path: str) -> str:
             html=to_html(plotter.plot_tau(**kwargs)),
             title="Kinetic energy density",
             text="This is tau",
+            section_id="section-tau",
         ))
 
         app(OncvData(
             html=to_html(plotter.plot_vtau(**kwargs)),
             title="Meta-GGA potential",
             text="This is vtau",
+            section_id="section-vtau",
         ))
 
     # Here we read the json file with the validation results and produce plotly plots.
@@ -203,7 +396,7 @@ def write_html_from_oncvpsp_outpath(out_path: str) -> str:
     name = os.path.basename(out_path).replace(".out", "")
 
     html = ONCV_TEMPLATE.render(
-        title=f"Oncvpsp figures for {name} ",
+        title=f"ONCVPSP figures for {name} ",
         input_str=parser.get_input_str(),
         plots=plots,
     )
